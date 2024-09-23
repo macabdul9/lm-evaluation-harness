@@ -492,7 +492,7 @@ def evaluate(
         # create `K` copies of each request `req` based off `K = req.repeats`
         cloned_reqs = []
         for req in reqs:
-             
+            import pdb;pdb.set_trace()
             req.args = (prompt_wrap.format_map({"instruction": req.args[0]}), req.args[1])
             cloned_reqs.extend([req] * req.repeats)
 
