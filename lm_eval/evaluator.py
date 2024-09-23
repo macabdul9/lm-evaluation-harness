@@ -43,6 +43,11 @@ if TYPE_CHECKING:
     from lm_eval.api.model import LM
     from lm_eval.api.task import Task
 
+prompt_wrap = (
+    "Below is an instruction that describes a task. "
+    "Write a response that appropriately completes the request.\n\n"
+    "### Instruction:\n{instruction}\n\n### Response:"
+)
 
 @positional_deprecated
 def simple_evaluate(
@@ -480,12 +485,15 @@ def evaluate(
             padding_requests[reqtype] += numpad
 
     ### Run LM on inputs, get all outputs ###
+    
     # execute each type of request
     for reqtype, reqs in requests.items():
         eval_logger.info(f"Running {reqtype} requests")
         # create `K` copies of each request `req` based off `K = req.repeats`
         cloned_reqs = []
         for req in reqs:
+             
+            req.args = (prompt_wrap.format_map({"instruction": req.args[0]}), req.args[1])
             cloned_reqs.extend([req] * req.repeats)
 
         if (lm.world_size > 1) and (padding_requests[reqtype] > 0):
