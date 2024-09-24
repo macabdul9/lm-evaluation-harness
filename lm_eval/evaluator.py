@@ -492,8 +492,8 @@ def evaluate(
         # create `K` copies of each request `req` based off `K = req.repeats`
         cloned_reqs = []
         for req in reqs:
-            import pdb;pdb.set_trace()
-            req.args = (prompt_wrap.format_map({"instruction": req.args[0]}), req.args[1])
+            # import pdb;pdb.set_trace()
+            req.arguments = (prompt_wrap.format_map({"instruction": req.arguments[0]}), req.arguments[1])
             cloned_reqs.extend([req] * req.repeats)
 
         if (lm.world_size > 1) and (padding_requests[reqtype] > 0):
